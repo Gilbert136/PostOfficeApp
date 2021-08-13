@@ -1,0 +1,101 @@
+﻿using ClosedXML.Excel;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace PostOfficeApp.UI
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            //ofd.Filter = "Excel Files | *.xls;*.xlsx;*.xlsm;";
+            ofd.Filter = "Excel Workbook | *.xls;*.xlsx;*.xlsm;";
+            ofd.Multiselect = false;
+            ofd.Title = "Importer usuarious";
+
+            if (ofd.ShowDialog() == true)
+            {
+                DataTable dt = new DataTable();
+                using (XLWorkbook workbook = new XLWorkbook(ofd.FileName))
+                {
+                    bool isFirstRow = true;
+                    var rows = workbook.Worksheet(1).RowsUsed();
+                    foreach (var row in rows)
+                    {
+                        if (isFirstRow)
+                        {
+                            foreach (IXLCell cell in row.Cells())
+                                dt.Columns.Add(cell.Value.ToString());
+                            isFirstRow = false;
+                        }
+                        else
+                        {
+                            dt.Rows.Add();
+                            int i = 0;
+                            foreach (IXLCell cell in row.Cells())
+                                dt.Rows[dt.Rows.Count - 1][i++] = cell.Value.ToString();
+                        }
+                    }
+                    dataGrid.ItemsSource = dt.DefaultView;
+                    label1.Content = $"Total records: {dataGrid.Items.Count}";
+                }
+            }
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DataView dv = dataGrid.ItemsSource as DataView;
+                if (dv != null)
+                    dv.RowFilter = textBox.Text;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message");
+            }
+        }
+
+        private void textBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            try {
+                if (e.Key == Key.Enter)
+                {
+                    DataView dv = dataGrid.ItemsSource as DataView;
+                    if (dv != null)
+                        dv.RowFilter = textBox.Text;
+                    label1.Content = $"Total records: {dataGrid.Items.Count}";
+                }
+            }
+            catch(Exception ex)
+            { 
+            
+            }
+            
+        }
+    }
+}
