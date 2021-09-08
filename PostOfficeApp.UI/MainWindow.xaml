@@ -7,12 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="360" Width="690">
     <Grid>
-        <Label x:Name="label" Content="Search:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="button" Content="Search" HorizontalAlignment="Left" Margin="592,13,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="63,13,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="524" KeyDown="textBox_KeyDown"/>
+        <Label x:Name="labelColumn" Content="Column:&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="63" Height="23"/>
+        <Button x:Name="buttonSearch" Content="Search" HorizontalAlignment="Left" Margin="592,13,0,0" VerticalAlignment="Top" Width="75" Click="ButtonSearch_Click"/>
+        <TextBox x:Name="textBoxKeyword" HorizontalAlignment="Left" Height="23" Margin="422,9,0,0" TextWrapping="Wrap" Text="Insert keyword" VerticalAlignment="Top" Width="129" KeyDown="TextBoxKeyword_KeyDown" TextChanged="TextBoxKeyword_TextChanged"/>
         <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Height="248" Margin="10,41,0,0" VerticalAlignment="Top" Width="657"/>
         <Label x:Name="label1" Content="Total Records: ???" HorizontalAlignment="Left" Margin="10,294,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="button1" Content="Open" HorizontalAlignment="Left" Margin="592,300,0,0" VerticalAlignment="Top" Width="75" Click="button1_Click"/>
+        <Button x:Name="buttonOpen" Content="Open" HorizontalAlignment="Left" Margin="592,300,0,0" VerticalAlignment="Top" Width="75" Click="ButtonOpen_Click"/>
+        <Label x:Name="labelOperator" Content="Operator:" HorizontalAlignment="Left" Height="23" Margin="219,9,0,0" VerticalAlignment="Top" Width="60"/>
+        <Label x:Name="labelKeyword" Content="Keyword:" HorizontalAlignment="Left" Height="25" Margin="361,9,0,0" VerticalAlignment="Top" Width="72"/>
+        <ComboBox x:Name="comboBoxColumn" HorizontalAlignment="Left" Height="22" Margin="73,12,0,0" VerticalAlignment="Top" Width="120" IsSynchronizedWithCurrentItem="False"/>
+        <ComboBox x:Name="comboBoxOperator" HorizontalAlignment="Left" Height="22" Margin="284,11,0,0" VerticalAlignment="Top" Width="43" IsSynchronizedWithCurrentItem="False" RenderTransformOrigin="1.391,-0.924"/>
 
     </Grid>
 </Window>

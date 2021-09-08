@@ -27,15 +27,16 @@ namespace PostOfficeApp.UI
         public MainWindow()
         {
             InitializeComponent();
+            //comboBoxColumn.DataContext = new List<string> { "Hello", "World" };
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void ButtonOpen_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             //ofd.Filter = "Excel Files | *.xls;*.xlsx;*.xlsm;";
-            ofd.Filter = "Excel Workbook | *.xls;*.xlsx;*.xlsm;";
+            ofd.Filter = "Excel Workbook | *.xlsx;*.xlsm;";
             ofd.Multiselect = false;
-            ofd.Title = "Importer usuarious";
+            ofd.Title = "Import Excel Workbook (.xlsx, .xlsm)";
 
             if (ofd.ShowDialog() == true)
             {
@@ -66,13 +67,14 @@ namespace PostOfficeApp.UI
             }
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+
+        private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 DataView dv = dataGrid.ItemsSource as DataView;
                 if (dv != null)
-                    dv.RowFilter = textBox.Text;
+                    dv.RowFilter = textBoxKeyword.Text;
             }
             catch (Exception ex)
             {
@@ -80,22 +82,28 @@ namespace PostOfficeApp.UI
             }
         }
 
-        private void textBox_KeyDown(object sender, KeyEventArgs e)
+        private void TextBoxKeyword_KeyDown(object sender, KeyEventArgs e)
         {
-            try {
+            try
+            {
                 if (e.Key == Key.Enter)
                 {
                     DataView dv = dataGrid.ItemsSource as DataView;
                     if (dv != null)
-                        dv.RowFilter = textBox.Text;
+                        dv.RowFilter = textBoxKeyword.Text;
                     label1.Content = $"Total records: {dataGrid.Items.Count}";
                 }
             }
-            catch(Exception ex)
-            { 
-            
+            catch (Exception ex)
+            {
+
             }
-            
+
+        }
+
+        private void TextBoxKeyword_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }
