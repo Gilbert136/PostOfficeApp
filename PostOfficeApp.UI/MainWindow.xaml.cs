@@ -28,6 +28,7 @@ namespace PostOfficeApp.UI
         {
             InitializeComponent();
             //comboBoxColumn.DataContext = new List<string> { "Hello", "World" };
+            
         }
 
         private void ButtonOpen_Click(object sender, RoutedEventArgs e)
@@ -50,7 +51,18 @@ namespace PostOfficeApp.UI
                         if (isFirstRow)
                         {
                             foreach (IXLCell cell in row.Cells())
-                                dt.Columns.Add(cell.Value.ToString());
+                            {
+                                try
+                                {
+                                    dt.Columns.Add(cell.Value.ToString());
+                                }
+                                catch (DuplicateNameException except)
+                                {
+                                    MessageBox.Show(except.Message, "Message");
+                                    // Exit Open File Dialog and return to MainWindow.
+                                    return;
+                                }
+                            }
                             isFirstRow = false;
                         }
                         else
@@ -62,6 +74,8 @@ namespace PostOfficeApp.UI
                         }
                     }
                     dataGrid.ItemsSource = dt.DefaultView;
+                    // Set the data source for the comboBox items.
+                    comboBoxColumn.ItemsSource = dt.Columns;
                     label1.Content = $"Total records: {dataGrid.Items.Count}";
                 }
             }
@@ -74,7 +88,11 @@ namespace PostOfficeApp.UI
             {
                 DataView dv = dataGrid.ItemsSource as DataView;
                 if (dv != null)
-                    dv.RowFilter = textBoxKeyword.Text;
+                {
+                    string columnName = dv.Table.Columns[comboBoxColumn.SelectedIndex].ColumnName;
+                    dv.RowFilter = $"{columnName} LIKE '%{textBoxKeyword.Text}%'";
+                    label1.Content = $"Total records: {dataGrid.Items.Count}";
+                }
             }
             catch (Exception ex)
             {
@@ -86,17 +104,20 @@ namespace PostOfficeApp.UI
         {
             try
             {
-                if (e.Key == Key.Enter)
+                if (e.Key == Key.Enter && textBoxKeyword.IsKeyboardFocusWithin)
                 {
                     DataView dv = dataGrid.ItemsSource as DataView;
                     if (dv != null)
-                        dv.RowFilter = textBoxKeyword.Text;
-                    label1.Content = $"Total records: {dataGrid.Items.Count}";
+                    {
+                        string columnName = dv.Table.Columns[comboBoxColumn.SelectedIndex].ColumnName;
+                        dv.RowFilter = $"{columnName} LIKE '%{textBoxKeyword.Text}%'";
+                        label1.Content = $"Total records: {dataGrid.Items.Count}";
+                    }
                 }
             }
             catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message, "Message");
             }
 
         }
